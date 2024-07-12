@@ -9,6 +9,14 @@
         @click="jumpLink(packageJson.github)"
       />
     </div>
+    <div class="site">
+      <n-text
+        class="site"
+        :depth="3"
+        v-html="'云深处'"
+        @click="jumpLink('https://www.likesrt.com')" 
+      />
+    </div>
     <n-text
       v-if="icp"
       :depth="3"
@@ -21,6 +29,7 @@
 
 <script setup>
 import packageJson from "@/../package.json";
+import { ref } from 'vue';
 
 const icp = ref(import.meta.env.VITE_ICP ? import.meta.env.VITE_ICP : null);
 
@@ -45,6 +54,15 @@ footer {
     .description {
       &::after {
         content: "@ Copyright By";
+        margin: 0 6px;
+      }
+    }
+  }
+  .site {
+    margin-bottom: 4px;
+    .description {
+      &::after {
+        content: "& site By";
         margin: 0 6px;
       }
     }
