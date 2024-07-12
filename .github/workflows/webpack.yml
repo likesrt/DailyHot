@@ -10,36 +10,40 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
+
       - uses: pnpm/action-setup@v3
         with:
           version: 8
-          
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
-          
+
       - name: Install dependencies
         run: pnpm install
-        
+
       - name: Build
         run: pnpm build
-        
+
       - name: Zip the Build
         run: zip -r dist.zip dist
-        
+
+      - name: Get the current tag
+        id: get_tag
+        run: echo ::set-output name=tag::$(git describe --tags --abbrev=0)
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ steps.get_tag.outputs.tag }}
+          release_name: Release ${{ steps.get_tag.outputs.tag }}
           draft: false
           prerelease: false
-          
+
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         env:
