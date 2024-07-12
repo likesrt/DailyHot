@@ -25,6 +25,27 @@
       </div>
       <div class="controls">
         <n-space justify="end">
+          <n-popover >
+            <template #trigger>
+              <!-- <n-button secondary strong round @click="router.push('/')"> -->
+                <n-button secondary strong round @click="router.push('/blog')">
+                <template #icon>
+                  <n-icon :component="Weibo" />
+                </template>
+              </n-button>
+            </template>
+            前往博客
+          </n-popover>
+          <n-popover v-if="showHomeButton">
+            <template #trigger>
+              <n-button secondary strong round @click="router.push('/')">
+                <template #icon>
+                  <n-icon :component="Home" />
+                </template>
+              </n-button>
+            </template>
+            前往首页
+          </n-popover>
           <n-popover v-if="showRefresh">
             <template #trigger>
               <n-button secondary strong round @click="router.go(0)">
@@ -94,16 +115,20 @@ import {
   Refresh,
   SettingTwo,
   HamburgerButton,
+  Home,
+  Weibo,
 } from "@icon-park/vue-next";
 import { getCurrentTime } from "@/utils/getTime.js";
 import { mainStore } from "@/store";
 import { NText, NIcon } from "naive-ui";
 import { useRouter } from "vue-router";
 
+
 const router = useRouter();
 const store = mainStore();
 const timeInterval = ref(null);
 const showRefresh = ref(false);
+const showHomeButton = ref(true);
 
 // 移动端时间模块
 const timeRender = () => {
@@ -201,6 +226,7 @@ watch(
   (val) => {
     const isHome = val.path === "/";
     showRefresh.value = isHome ? true : false;
+    showHomeButton.value = isHome ? false : true;
   }
 );
 
@@ -209,11 +235,14 @@ onMounted(() => {
     store.timeData = getCurrentTime();
   }, 1000);
   showRefresh.value = router.currentRoute.value?.path === "/" ? true : false;
+  showHomeButton.value = router.currentRoute.value?.path === "/" ? false : true;
 });
 
 onBeforeUnmount(() => {
   clearInterval(timeInterval.value);
 });
+
+
 </script>
 
 <style lang="scss" scoped>

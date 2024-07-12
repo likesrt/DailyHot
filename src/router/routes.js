@@ -8,6 +8,7 @@ const routes = [
     },
     component: () => import("@/views/Home.vue"),
   },
+
   // 新闻列表
   {
     path: "/list",
@@ -65,6 +66,17 @@ const routes = [
   {
     path: "/:pathMatch(.*)",
     redirect: "/404",
+  },
+  // 跳转到外部网站
+  {
+    path: "/blog",
+    name: "blog",
+    beforeEnter(to, from, next) {
+ 
+        // 在新标签页打开外部链接
+        window.open("https://blog.likesrt.com", "_blank");
+        next(false);  // 终止路由导航
+      }
   },
 ];
 
